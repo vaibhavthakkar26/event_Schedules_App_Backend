@@ -4,7 +4,6 @@ const { v4: uuidv4 } = require("uuid");
 
 exports.create = async (data) => {
   try {
-    console.log("createBody",data);
     const priorityValue = priorityHandler.find(
       (res) => res.name === data.priority
     );
@@ -74,44 +73,53 @@ exports.list = async () => {
 exports.update = async (id, body) => {
 
   try {
-    // body {
-    //   title: 'testing-1',
-    //   priority: 'Medium',
-    //   description: 'testing',
-    //   startDate: '2023-06-01T15:30:00.000Z',
-    //   endDate: '2023-06-01T17:00:00.000Z'
-    // }
-    console.log("body",body);
-    // const priorityValue = priorityHandler.find(
-    //   (res) => res.name === data.priority
-    // );
-    // let uuidString = uuidv4();
-
-    // const eventInfo = new Event({
-    //   title: data.title,
-    //   startDate: new Date(data.startDate),
-    //   endDate: new Date(data.endDate),
-    //   description: data.description,
-    //   priorityName: priorityValue.name,
-    //   priorityColor: priorityValue.color,
-    //   priorityColorCode: priorityValue.colorCode,
-    //   id: uuidString,
-    // });
-    if (id) {
-      const updateEvent = await Event.findOneAndUpdate({ id }, body, {
-        new: true,
-      });
-      return {
-        success: true,
-        message: "UPDATE SUCCESSFUL",
-        data: updateEvent,
-      };
-    } else {
-      return {
-        success: false,
-        message: "CANT UPDATE EVENT",
-        data: {},
-      };
+    const priorityValue = priorityHandler.find(
+      (res) => res.name === body.priority
+    );
+    if(priorityValue){
+      const data = {
+        priorityName: priorityValue?.name,
+        priorityColor: priorityValue?.color,
+        priorityColorCode: priorityValue?.colorCode, 
+        startDate : body.startDate,
+        endDate : body.endDate,
+        title: body.title,
+        description : body.description,
+        id:id
+      }
+      if (id) {
+        const updateEvent = await Event.findOneAndUpdate({ id }, data, {
+          new: true,
+        });
+        return {
+          success: true,
+          message: "UPDATE SUCCESSFUL",
+          data: updateEvent,
+        };
+      } else {
+        return {
+          success: false,
+          message: "CANT UPDATE EVENT",
+          data: {},
+        };
+      }
+    }else{
+      if (id) {
+        const updateEvent = await Event.findOneAndUpdate({ id }, body, {
+          new: true,
+        });
+        return {
+          success: true,
+          message: "UPDATE SUCCESSFUL",
+          data: updateEvent,
+        };
+      } else {
+        return {
+          success: false,
+          message: "CANT UPDATE EVENT",
+          data: {},
+        };
+      }
     }
   } catch (err) {
     return {

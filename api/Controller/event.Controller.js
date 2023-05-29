@@ -33,7 +33,6 @@ router.get("/list",async(req,res)=>{
 
 router.patch("/:id",async(req,res)=>{
   try{
-    console.log("req+patch",req.body);
     let {data,message,success} = await eventService.update(req.params.id,req.body);
     if (success) {
       return res.status(200).json({ success, message, data });
@@ -41,7 +40,6 @@ router.patch("/:id",async(req,res)=>{
       return res.status(400).json({ success, message, data });
     }
   }catch(err){
-    console.log("----",err);
     return res.status(400).json({ message: err });
   }
 })

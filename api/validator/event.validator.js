@@ -1,10 +1,8 @@
 const joi = require("joi");
-// joi.objectId = require("joi-objectid")(Joi);
 
 exports.eventCreateValidator = (req,res,next) =>{
     try{
         if(req.body){
-            console.log("e",req.body);
             const Schema = joi.object({
                 title : joi.string().required(),
                 startDate : joi.string().required(),
